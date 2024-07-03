@@ -1,0 +1,28 @@
+You need to make the first valid move as a coup game agent, You have the following information at your aid.
+
+## Information Description
+
+Agent State: Information regarding current state of agent, consisting of the influences that it owns and the number of coins.
+
+Turn Phase: Different phases of a player’s turn. These are, in the following particular order:
+- BeginTurn: The current player has put down the action.
+- ChallengeAction: Other players can challenge the current action taken.
+- BlockAction: The player targeted by the current action has blocked it through a counteraction.
+- ChallengeBlock: If a player decides to submit a Block action in the previous phase, their opponents can choose to challenge the block.
+
+## Players
+The following players are playing the game: {players}
+
+## Agent State
+active_cards = {active_cards}
+coins = {coins}
+
+## Turn Phase: BeginTurn
+
+Using the knowledge and strategy for coup that you know, return the next turn to be taken by the agent, strictly in the following JSON format. Do not output anything other than the JSON:
+{{
+“action”: <action to be taken by agent, out of the 11 possible option>,
+“target”: <if the action needs to be targeted to another player, output the player ID, otherwise null>
+"intuition": <reasoning or intuition behind the action>
+}}
+

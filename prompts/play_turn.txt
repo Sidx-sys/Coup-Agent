@@ -1,0 +1,49 @@
+You have been provided with the following information to make a valid move as a coup game agent:
+
+Game History: History of the moves that have taken place till now.
+
+Eliminated Cards: Set of cards (influences) that have been discarded, and by whom, to help understand bluffs and current game environment.
+
+Current Action: Information regarding the latest action played, consisting of player index, influence or card used, target player if one exists.
+
+Agent State: Information regarding current state of agent, consisting of the influences that it owns and the number of coins.
+
+Opponent State: Information regarding current state of opponents, consisting of the number of influences and the number of coins they own.
+
+Turn Phase: Different phases of a player’s turn. These are, in the following particular order:
+- BeginTurn: The current player has put down the action.
+- ChallengeAction: Other players can challenge the current action taken.
+- BlockAction: The player targeted by the current action has blocked it through a counteraction.
+- ChallengeBlock: If a player decides to submit a Block action in the previous phase, their opponents can choose to challenge the block.
+
+## Players
+The following players are playing the game: {players}
+
+## Game History
+{game_history}
+
+## Eliminated Cards
+{eliminated_cards}
+
+## Previous Action
+player_index: {player_index}
+player_action: {player_action}
+target_player_index: {target_player_index}
+turn_phase: {turn_phase}
+
+## Agent State
+active_cards = {active_cards}
+coins = {coins}
+
+## Opponent States
+{opponent_states}
+
+## Turn Phase: {turn_phase}
+
+Using the knowledge and strategy for coup that you know, return the next turn to be taken by the agent, strictly in the following JSON format. Do not output anything other than the JSON:
+{{
+“action”: <action to be taken by agent, out of the 11 possible option>,
+“target”: <if the action needs to be targeted to another player, the player ID, otherwise null>
+"intuition": <reasoning or intuition behind the action>
+}}
+

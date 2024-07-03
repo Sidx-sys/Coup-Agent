@@ -1,0 +1,40 @@
+You have been provided with the following information to decide which card to drop when being couped or assassinated as a coup game agent:
+
+Game History: History of the moves that have taken place till now.
+
+Eliminated Cards: Set of cards (influences) that have been discarded, and by whom, to help understand bluffs and current game environment.
+
+Current Action: Information regarding the latest action played, consisting of player index, influence or card used, target player if one exists.
+
+Agent State: Information regarding current state of agent, consisting of the influences that it owns and the number of coins.
+
+Opponent State: Information regarding current state of opponents, consisting of the number of influences and the number of coins they own.
+
+## Players
+The following players are playing the game: {players}
+
+## Game History
+{game_history}
+
+## Eliminated Cards
+{eliminated_cards}
+
+## Agent State
+active_cards: {active_cards}
+coins: {coins}
+
+## Opponent States
+{opponent_states}
+
+## Decision Context
+You are being targeted by a coup or assassination, and you need to discard one of your cards. Consider the following:
+- The strategic importance of each card you hold.
+- The current game state and possible future moves.
+- The actions and behaviors of opponents.
+- The overall balance and potential bluffs in the game.
+
+Using the knowledge and strategy for coup that you know, return the card to be discarded, strictly in the following JSON format. Do not output anything other than the JSON string:
+{{
+"card_to_discard": <card to be discarded, mention only the name of the card from the set of active cards>,
+"intuition": <reasoning or intuition behind discarding this card>
+}}
