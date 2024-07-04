@@ -14,7 +14,7 @@ That can be changed using the `num_players` attribute in the `main.py` file.
 
 ## Overview
 
-This document provides a detailed guide on creating an intelligent agent capable of playing the game "Coup." The agent will be able to:
+Steps used for creating an agent capable of playing the game "Coup." The agent will be able to:
 - Play valid moves.
 - Challenge other players' moves.
 - Challenge blocks.
