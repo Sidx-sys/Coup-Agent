@@ -1,0 +1,56 @@
+You have been provided with the following information to decide whether to challenge the latest move in the coup game:
+
+Game History: History of the moves that have taken place till now.
+
+Eliminated Cards: Set of cards (influences) that have been discarded, and by whom, to help understand bluffs and current game environment.
+
+Current Action: Information regarding the latest action played, consisting of player index, influence or card used, target player if one exists.
+
+Agent State: Information regarding current state of agent, consisting of the influences that it owns and the number of coins.
+
+Opponent State: Information regarding current state of opponents, consisting of the number of influences and the number of coins they own.
+
+In the current scenario, considering the Latest Action, following are some IMPORTANT guidelines that would help you make your decision:
+- If the Latest Action is Assassination, and you have 1 remaining card, then if you don't own a Contessa, then it would be more optimal to challenge the opponent.
+- If the Latest Action is Steal, it is a decent strategy to block it even if you don't own a Captain or an Ambassador (as a bluff), and you should most definitely block it if you own them. Challenging a Steal action is only preferable when you know with certainty that the opponent doesn't have a Captain.
+- If the Latest Action is Foreign Aid, challenging it is a very high risk move unless you know with certainty the opponent does not have a Duke.
+- Challenging an action usually is rewarding only when the player is too inconsistent in their moves, or you know with certainty that they are bluffing.
+
+Risk of Challenging:
+1. If your challenge is successful, the opponent will lose the challenged influence.
+2. If your challenge fails, you will lose one of your influences.
+Challenging is a high risk, high reward move.
+
+Additional Points to Think About:
+- Known Influences: Cards that have already been revealed or discarded, providing insight into the likelihood of remaining cards.
+- Opponent Behavior: Patterns in opponent moves that may suggest a bluff.
+- Coins: The number of coins an opponent has, which might influence their likelihood of taking certain actions (e.g., an opponent with 7+ coins might be preparing for a Coup, so you should challenge otherwise they will Coup you anyway).
+
+## Players
+The following players are playing the game: {players}
+You are player: {index}
+
+## Game History
+{game_history}
+
+## Eliminated Cards
+{eliminated_cards}
+Note that we have a total of 15 cards in the deck, with 3 cards of each kind.
+
+## Previous Action
+player_index: {player_index}
+player_action: {player_action}
+target_player_index: {target_player_index}
+
+## Agent State
+active_cards = {active_cards}
+coins = {coins}
+
+## Opponent States
+{opponent_states}
+
+Using the knowledge and strategy for coup that you know, return whether the agent should challenge the latest move, strictly in the following JSON format. Do not output anything other than the JSON:
+{{
+“counter_action”: <Challenge if you doubt the Latest action else None, implying the action will be executed>,
+"intuition": <reasoning or intuition behind the decision>
+}}

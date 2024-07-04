@@ -12,12 +12,14 @@ Opponent State: Information regarding current state of opponents, consisting of 
 
 Turn Phase: Different phases of a player’s turn. These are, in the following particular order:
 - BeginTurn: The current player has put down the action.
-- ChallengeAction: Other players can challenge the current action taken.
-- BlockAction: The player targeted by the current action has blocked it through a counteraction.
-- ChallengeBlock: If a player decides to submit a Block action in the previous phase, their opponents can choose to challenge the block.
+
+Make sure the bluffs you make, are consistent with your earlier moves, and also are not extremely risky. For example:
+- If you have bluffed as a Duke earlier, you could use it occasionally elsewhere to use the Tax action of the Duke as well. Same goes for other roles.
+- If two Assassins have already been discarded (part of Eliminated Cards) then it is quite likely that one of the other player has the third Assassin. In that case bluffing as one is a very risky move and hence not preferable.
 
 ## Players
 The following players are playing the game: {players}
+You are player: {index}
 
 ## Game History
 {game_history}
@@ -29,7 +31,6 @@ The following players are playing the game: {players}
 player_index: {player_index}
 player_action: {player_action}
 target_player_index: {target_player_index}
-turn_phase: {turn_phase}
 
 ## Agent State
 active_cards = {active_cards}
@@ -38,11 +39,11 @@ coins = {coins}
 ## Opponent States
 {opponent_states}
 
-## Turn Phase: {turn_phase}
+## Turn Phase: BeginTurn
 
 Using the knowledge and strategy for coup that you know, return the next turn to be taken by the agent, strictly in the following JSON format. Do not output anything other than the JSON:
 {{
-“action”: <action to be taken by agent, out of the 11 possible option>,
+“action”: <action to be taken by agent,strictly out of the following options: Income, Foreign Aid, Exchange, Tax, Steal, Coup, Assassinate>,
 “target”: <if the action needs to be targeted to another player, the player ID, otherwise null>
 "intuition": <reasoning or intuition behind the action>
 }}

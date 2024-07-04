@@ -1,0 +1,208 @@
+!!! Realized some bugs in this, regarding the current cards used in prompts, along with typos in Actions
+
+Deck: ['Ambassador', 'Duke', 'Ambassador', 'Assassin', 'Captain', 'Duke', 'Captain', 'Captain', 'Contessa']
+----------
+Active Player:  0
+number_of_coins=2 card_1='Assassin' card_2='Assassin' card_1_alive=True card_2_alive=True
+{
+"action": "Income",
+"target": null,
+"intuition": "Early in the game, it's beneficial to collect income to appear non-threatening and to slowly build resources without drawing attention. With only 2 coins and holding two Assassins, aggressive plays like Assassinate are not yet feasible. Income is a safe choice that cannot be blocked or challenged."
+}
+***Checking For Challenge Action or Block Action***
+{
+"counter_action": "None",
+"intuition": "The latest action taken by player 0 was 'Income', which is a basic action that does not require any specific card to perform and cannot be challenged. Therefore, there is no basis for a challenge."
+}
+```json
+{
+"counter_action": "None",
+"intuition": "The latest action taken by player 0 was Income, which is a basic action that does not require any specific card to perform and cannot be challenged. Therefore, there is no basis for challenging this action."
+}
+```
+***Checking For Challenge on Block Action***
+----------
+Active Player:  1
+number_of_coins=2 card_1='Duke' card_2='Contessa' card_1_alive=True card_2_alive=True
+{
+"action": "Tax",
+"target": null,
+"intuition": "Claiming Duke early to collect 3 coins is a strong move to build financial power quickly, and it's consistent with having a Duke card. This action also sets a precedent for future turns, making it less likely to be challenged initially."
+}
+***Checking For Challenge Action or Block Action***
+```json
+{
+"counter_action": "None",
+"intuition": "Challenging the Tax action by Player 1 at this early stage is risky without concrete evidence of bluffing. Since no Duke cards have been eliminated and this is one of the first actions by Player 1, there is a reasonable chance they could indeed have a Duke. Additionally, challenging and losing would cost us one of our influences, which is too high a risk given the current lack of evidence against Player 1's claim."
+}
+```
+{
+"counter_action": "None",
+"intuition": "Player 1 has just used the Tax action, which requires the Duke influence. Since this is the beginning of the game and no cards have been eliminated, there is no strong evidence to suggest that Player 1 does not have a Duke. Challenging this early without clear evidence or inconsistency in Player 1's actions poses a high risk of losing an influence unnecessarily."
+}
+***Checking For Challenge on Block Action***
+----------
+Active Player:  2
+number_of_coins=2 card_1='Ambassador' card_2='Contessa' card_1_alive=True card_2_alive=True
+{
+"action": "Income",
+"target": null,
+"intuition": "Early in the game, it's beneficial to collect income to appear non-threatening and to build resources gradually without drawing attention."
+}
+***Checking For Challenge Action or Block Action***
+```json
+{
+"counter_action": "None",
+"intuition": "The latest action taken by player 2 was Income, which is a basic action that does not require revealing any specific card and cannot be challenged. Therefore, there is no basis for challenging this action."
+}
+```
+```json
+{
+"counter_action": "None",
+"intuition": "The latest action taken by player 2 is Income, which is a basic action that does not require any specific card to perform and cannot be challenged. Therefore, there is no basis or benefit in challenging this action."
+}
+```
+***Checking For Challenge on Block Action***
+----------
+Active Player:  0
+number_of_coins=3 card_1='Assassin' card_2='Assassin' card_1_alive=True card_2_alive=True
+{
+"action": "Assassinate",
+"target": 1,
+"intuition": "Using the Assassin's ability to eliminate an influence from Player 1, who has the highest coins (5), reducing their threat and ability to coup soon. This move also leverages my actual card, minimizing the risk of a successful challenge."
+}
+***Checking For Challenge Action or Block Action***
+{
+"counter_action": "None",
+"intuition": "Player 0 has used Assassinate on Player 1. As an agent, I possess a Contessa, which allows me to block the assassination attempt. Since I can effectively counter this action without needing to challenge and risk losing an influence, challenging here is unnecessary. Additionally, challenging could lead to losing an influence if the challenge fails, especially if Player 0 indeed has an Assassin."
+}
+{
+"counter_action": "None",
+"intuition": "Player 0's action to Assassinate is not suspicious given no prior inconsistent actions or revealed Assassin cards. Additionally, as I possess a Contessa, I can safely block the assassination attempt without needing to challenge."
+}
+***Checking For Challenge on Block Action***
+----------
+Active Player:  1
+number_of_coins=5 card_1='Duke' card_2='Contessa' card_1_alive=False card_2_alive=True
+{
+"action": "Tax",
+"target": null,
+"intuition": "As I currently hold a Duke, claiming Tax is a valid and strong move to increase my coin count without risk of challenge, given that one Duke has already been eliminated and I possess another. This will also position me to potentially coup in upcoming turns by accumulating sufficient coins."
+}
+***Checking For Challenge Action or Block Action***
+```json
+{
+"counter_action": "Challenge",
+"intuition": "Player 1 has used the Tax action twice consecutively, claiming to be the Duke. However, one Duke card has been eliminated, reducing the probability of Player 1 having the Duke. Additionally, Player 1's repeated use of the Tax action without diversifying actions raises suspicion of a bluff, especially this early in the game where such a strong move can make them a target for challenges. Challenging this action could potentially eliminate a strong card from Player 1 or confirm their role, providing strategic advantage."
+}
+```
+----------
+Active Player:  2
+number_of_coins=3 card_1='Ambassador' card_2='Contessa' card_1_alive=True card_2_alive=True
+{
+"action": "Assassinate",
+"target": 0,
+"intuition": "With 3 coins, the agent can afford to use the Assassin's ability to force player 0 to lose an influence. This strategic move can potentially weaken player 0, who currently has 2 influences left. Since one Contessa has been eliminated, the likelihood of player 0 having a Contessa to block the assassination is reduced, making this an opportune moment to attack."
+}
+***Checking For Challenge Action or Block Action***
+{
+"counter_action": "Challenge",
+"intuition": "Player 2 has used the Assassinate action. Given that one Assassin card is already in my possession and another Assassin card is also with me, it is highly unlikely that Player 2 has an Assassin. Therefore, challenging this action is likely to be successful."
+}
+----------
+Active Player:  0
+number_of_coins=0 card_1='Assassin' card_2='Assassin' card_1_alive=True card_2_alive=True
+{
+"action": "Income",
+"target": null,
+"intuition": "With 0 coins and holding two Assassin cards, the safest and only viable action is to collect Income. This will slowly build up resources to potentially use Assassinate in future turns, while avoiding immediate threats or challenges."
+}
+***Checking For Challenge Action or Block Action***
+{
+"counter_action": "None",
+"intuition": "The latest action taken by player 0 is Income, which is a basic action that does not require revealing any character card and cannot be challenged. Therefore, there is no basis for a challenge."
+}
+***Checking For Challenge on Block Action***
+----------
+Active Player:  2
+number_of_coins=3 card_1='Ambassador' card_2='Contessa' card_1_alive=True card_2_alive=False
+{
+"action": "Exchange",
+"target": null,
+"intuition": "Using the Ambassador's Exchange action to potentially improve my hand and gather more information about the deck. This move also avoids direct confrontation and keeps a low profile, aligning with the strategy of non-threatening growth."
+}
+***Checking For Challenge Action or Block Action***
+```json
+{
+"counter_action": "None",
+"intuition": "Player 2 used the Exchange action. Given the game history and eliminated cards, there is no strong evidence to doubt this action. Both Contessas are eliminated, reducing the likelihood of bluffing with Ambassador, but this alone isn't sufficient to challenge. Additionally, challenging an Exchange is generally low reward because it's a defensive and information-gathering move rather than an aggressive one."
+}
+```
+***Checking For Challenge on Block Action***
+----------
+Active Player:  0
+number_of_coins=1 card_1='Assassin' card_2='Assassin' card_1_alive=True card_2_alive=True
+{
+"action": "Income",
+"target": null,
+"intuition": "With only 1 coin and holding two Assassins, the safest move is to collect Income. This avoids drawing attention or risking a challenge while slowly building up coins for a future Assassinate or Coup. Since both opponents have a single card left, staying low-key is advantageous."
+}
+***Checking For Challenge Action or Block Action***
+{
+"counter_action": "None",
+"intuition": "The latest action taken by player 0 is Income, which is a basic action that does not require any specific card to perform and cannot be challenged. Therefore, there is no basis for a challenge."
+}
+***Checking For Challenge on Block Action***
+----------
+Active Player:  2
+number_of_coins=3 card_1='Ambassador' card_2='Contessa' card_1_alive=True card_2_alive=False
+{
+"action": "Exchange",
+"target": null,
+"intuition": "Using the Ambassador's ability to exchange cards allows for refreshing the hand and gaining potentially more useful influences while maintaining a low profile. This action also provides valuable information about the deck composition and helps in planning future strategies."
+}
+***Checking For Challenge Action or Block Action***
+{
+"counter_action": "None",
+"intuition": "The opponent (Player 2) has used the Exchange action twice consecutively, which is consistent with their previous moves and does not directly contradict any known information. Since Exchange is a low-risk action to bluff and challenging it unsuccessfully would result in losing an influence, it is safer not to challenge this action. Additionally, with two Assassins in hand, maintaining both influences is crucial for survival and potential offensive moves."
+}
+***Checking For Challenge on Block Action***
+----------
+Active Player:  0
+number_of_coins=2 card_1='Assassin' card_2='Assassin' card_1_alive=True card_2_alive=True
+{
+"action": "Income",
+"target": null,
+"intuition": "With only 2 coins and holding two Assassin cards, the safest move is to collect Income. This avoids drawing attention or risking a challenge, especially since Assassinations are not affordable yet and other aggressive actions like Coup are also not possible with the current coin count. Collecting income will slowly build up resources for a future Assassinate or Coup."
+}
+***Checking For Challenge Action or Block Action***
+{
+"counter_action": "None",
+"intuition": "The latest action taken by player 0 is Income, which is a basic action that does not require any specific card to execute and cannot be challenged. Therefore, there is no basis for a challenge."
+}
+***Checking For Challenge on Block Action***
+----------
+Active Player:  2
+number_of_coins=3 card_1='Contessa' card_2='Contessa' card_1_alive=True card_2_alive=False
+{
+"action": "Income",
+"target": null,
+"intuition": "With only 3 coins and holding two Contessa cards, the safest move is to collect Income. This avoids drawing unnecessary attention or challenges, especially since the agent does not have the roles to perform Tax, Steal, or Assassinate credibly. Collecting income will slowly build up the coin count needed for a coup, while maintaining a low profile."
+}
+***Checking For Challenge Action or Block Action***
+```json
+{
+"counter_action": "None",
+"intuition": "The latest move by player 2 is Income, which is a basic action that does not require any specific card to perform. There is no basis for challenging this action as it cannot be falsified, and challenging it would automatically result in a loss of influence for the challenger."
+}
+```
+***Checking For Challenge on Block Action***
+----------
+Active Player:  0
+number_of_coins=3 card_1='Assassin' card_2='Assassin' card_1_alive=True card_2_alive=True
+{
+"action": "Assassinate",
+"target": 2,
+"intuition": "Using Assassinate on player 2 is strategic as it leverages my role as Assassin, which is consistent with my cards. Player 2 has only 1 card left, making this a potentially game-ending move. Additionally, with 3 coins, I can afford this action, and it directly challenges the remaining player, potentially leading to a win if not successfully blocked or challenged."
+}
+***Checking For Challenge Action or Block Action***

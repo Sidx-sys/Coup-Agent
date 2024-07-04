@@ -1,0 +1,60 @@
+You have been provided with the following information to decide whether to:
+- Block the latest move (only in case if the Latest Action is Foreign Aid, Steal or Assassination)
+- or Challenge the move (applicable for all actions except Income and Coup, i.e. Foreign Aid, Steal, Assassination, Tax, Exchange, Block Foreign Aid, Block Steal, Block Assassination)
+- or None, to let the action take place
+
+Game History: History of the moves that have taken place till now.
+Eliminated Cards: Set of cards (influences) that have been discarded, and by whom, to help understand bluffs and current game environment.
+Current Action: Information regarding the latest action played, consisting of player index, influence or card used, target player if one exists.
+Agent State: Information regarding current state of agent, consisting of the influences that it owns and the number of coins.
+Opponent State: Information regarding current state of opponents, consisting of the number of influences and the number of coins they own.
+
+How to use the information:
+- Known Influences: Cards that have already been revealed or discarded, providing insight into the likelihood of remaining cards.
+- Opponent Behavior: Patterns in opponent moves that could be seen from Game History. They may suggest a bluff, and could help you call the bluff or take some action against it.
+- Coins: The number of coins an opponent has, which might influence their likelihood of taking certain actions (e.g., an opponent with 7+ coins might be preparing for a Coup, so you should challenge otherwise they will Coup you anyway).
+
+Risk of Blocking or Challenging:
+1. If you choose to block and the block is successful, the opponent's action is negated.
+2. If you choose to challenge the move, and it is successful, the opponent will lose the challenged influence (card).
+3. If your challenge or block fails, you will lose one of your influences (card).
+
+In the current scenario, considering the Latest Action, following are some IMPORTANT guidelines that would help you make your decision:
+- If the Latest Action is Assassination, and you have 2 remaining cards, then blocking it without having a Contessa at hand would be a bad decision since the assassination will go through, and you will lose a card due to an unsuccessful block. This will leave you with 0 cards, which is GAME OVER.
+- If the Latest Action is Assassination, and you have 1 remaining card, then block it only if you have a Contessa, because if your opponent challenges your block, you'll get a new card, and the opponent will lose a card. If you don't own a Contessa, then it would be more optimal to challenge the opponent.
+- If the Latest Action is Steal, it is a decent strategy to block it even if you don't own a Captain or an Ambassador (as a bluff), and you should most definitely block it if you own them. Challenging a Steal action is only preferable when you know with certainty that the opponent doesn't have a Captain.
+- If the Latest Action is Foreign Aid, you should block it if you own a Duke, otherwise based on information available you could play a riskier move with the bluff.
+- Challenging an action usually is rewarding only when the player is too inconsistent in their moves, or you know with certainty that they are bluffing.
+
+Make sure the bluffs you make, are consistent with your earlier moves, and also are not extremely risky. For example:
+- If you have bluffed as a Duke earlier, you could use it occasionally elsewhere to use the Tax action of the Duke as well.
+- If two Assassins have already been discarded (part of Eliminated Cards) then it is quite likely that one of the other player has the third Assassin. In that case bluffing as one is a very risky move and hence not preferable.
+
+## Players
+The following players are playing the game: {players}
+You are player: {index}
+
+## Game History
+{game_history}
+
+## Eliminated Cards
+{eliminated_cards}
+Note that we have a total of 15 cards in the deck, with 3 cards of each kind.
+
+## Agent State
+active_cards = {active_cards}
+coins = {coins}
+
+## Opponent States
+{opponent_states}
+
+## Latest Action (to Block, Challenge or None)
+player_index: {player_index}
+player_action: {player_action}
+target_player_index: {target_player_index}
+
+Using the knowledge and strategy for coup that you know, return whether the agent should block or challenge the latest move, strictly in the following JSON format. Do not output anything other than the JSON:
+{{
+“counter_action”: <valid actions from set of 'Block Foreign Aid', 'Block Steal', 'Block Assassination', 'Challenge' or 'None'>,
+"intuition": <reasoning or intuition behind the decision>
+}}

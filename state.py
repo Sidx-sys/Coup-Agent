@@ -37,6 +37,21 @@ class PlayerState(BaseModel):
             self.card_1 = cards[0]
             self.card_2 = cards[1]
 
+    def active_cards(self) -> list[str]:
+        res = []
+        if self.card_1_alive:
+            res.append(self.card_1)
+        if self.card_2_alive:
+            res.append(self.card_2)
+        return res
+
+    def switch_with_new(self, card_to_discard: str, deck: list[str]):
+        new_card = deck.pop()
+        if self.card_1 == card_to_discard:
+            self.card_1 = new_card
+        else:
+            self.card_2 = new_card
+
 
 class TurnPhase(Enum):
     BeginTurn = 0
@@ -48,17 +63,16 @@ class TurnPhase(Enum):
 class GameState(BaseModel):
     player_index: int = Field(..., ge=0, le=7)
     player_action: Literal[
-        'Income', 'Foreign Aid', 'Coup', 'Tax', 'Assassinate', 'Exchange', 'Steal', 'Challenge', 'Block Foreign Aid', 'Block Steal', 'Block Assassinate'] = Field(
+        'Income', 'Foreign Aid', 'Coup', 'Tax', 'Assassinate', 'Exchange', 'Steal', 'Challenge', 'Block Foreign Aid', 'Block Steal', 'Block Assassination'] = Field(
         ...)
     target_player_index: Optional[Union[None, int]] = Field(..., ge=0, le=7)
-    turn_phase: Literal['BeginTurn', 'ChallengeAction', 'BlockAction', 'ChallengeBlock'] = Field(...)
 
 
 class AgentAction(BaseModel):
-    action: Optional[Literal[
-        'Income', 'Foreign Aid', 'Coup', 'Tax', 'Assassinate', 'Exchange', 'Steal', 'Challenge', 'Block Foreign Aid', 'Block Steal', 'Block Assassinate']] = Field(None)
+    action: Optional[Literal['Income', 'Foreign Aid', 'Coup', 'Tax', 'Assassinate', 'Exchange', 'Steal', 'Challenge', 'Block Foreign Aid', 'Block Steal', 'Block Assassination', 'None']] = Field(None)
     target: Optional[Union[None, int]] = None
-    card_to_discard: Optional[str] = None
+    card_to_discard: Optional[Literal['Duke', 'Assassin', 'Ambassador', 'Captain', 'Contessa']] = None
+    counter_action: Optional[Literal['Challenge', 'Block Foreign Aid', 'Block Steal', 'Block Assassination', 'None']] = Field(None)
     intuition: str
 
     @field_validator('target', mode='before')
@@ -74,5 +88,4 @@ class ProcessAction(BaseModel):
     history: Optional[List[GameState]]
     eliminated_cards: Optional[List[str]]
     opponent_states: Optional[list[str]]
-    turn_phase: Optional[Literal['BeginTurn', 'ChallengeAction', 'BlockAction', 'ChallengeBlock']]
     player_action: AgentAction

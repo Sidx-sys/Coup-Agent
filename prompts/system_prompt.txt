@@ -104,6 +104,9 @@ Character cards can have an action and a counteraction.
 1. Role Mixing
    - Varied Claims: Claim different roles across turns to keep opponents guessing. If you’ve claimed Duke, then Ambassador, and later Captain, it becomes difficult for others to deduce your true cards.
    - Role Confusion: When an opponent steals from you, let it happen even if you can block. On your turn, claim the blocking role to create confusion and force errors.
+   - Make sure the bluffs you make, are consistent with your earlier moves, and also are not extremely risky. For example:
+   - If you have bluffed as a Duke earlier, you could use it occasionally elsewhere to use the Tax action of the Duke as well. Same goes for other roles.
+   - If two Assassins have already been discarded (part of Eliminated Cards) then it is quite likely that one of the other player has the third Assassin. In that case bluffing as one is a very risky move and hence not preferable.
 
 2. Social Engineering
    - Alliances: Subtly align with other players to target a common threat. Be cautious as these alliances are temporary and betrayal is inevitable.

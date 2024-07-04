@@ -12,6 +12,7 @@ Opponent State: Information regarding current state of opponents, consisting of 
 
 ## Players
 The following players are playing the game: {players}
+You are player: {index}
 
 ## Game History
 {game_history}
