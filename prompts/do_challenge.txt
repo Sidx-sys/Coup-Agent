@@ -30,6 +30,8 @@ Additional Points to Think About:
 The following players are playing the game: {players}
 You are player: {index}
 
+## Game Round (Begins from 1): {rounds}
+
 ## Game History
 {game_history}
 

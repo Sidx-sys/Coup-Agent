@@ -5,12 +5,9 @@ You need to make the first valid move as a coup game agent, You have the followi
 Agent State: Information regarding current state of agent, consisting of the influences that it owns and the number of coins.
 
 Turn Phase: Different phases of a player’s turn. These are, in the following particular order:
-- BeginTurn: The current player has put down the action.
-- ChallengeAction: Other players can challenge the current action taken.
-- BlockAction: The player targeted by the current action has blocked it through a counteraction.
-- ChallengeBlock: If a player decides to submit a Block action in the previous phase, their opponents can choose to challenge the block.
+- BeginTurn: The current player has to put down the action, so only Income, Foreign Aid, Steal (Captain), Tax (Duke), Assassinate (Assassin), Exchange (Ambassador) or Coup are valid actions in this turn. Challenge and Block Actions are strictly prohibited here.
 
-As a note, make sure the bluffs you make, are consistent with your earlier moves, and also are not extremely risky. For example:
+As a note, bluffing could be rewarding in the early rounds, where players have less information. Using Strategic Bluffing can help. For example:
 - If you have bluffed as a Duke earlier, you could use it occasionally elsewhere to use the Tax action of the Duke as well. Same goes for the other roles.
 - If two Assassins have already been discarded (part of Eliminated Cards) then it is quite likely that one of the other player has the third Assassin. In that case bluffing as one is a very risky move and hence not preferable.
 - It is highly rewarding to bluff in the first round, since that is when the least amount of information is known among the players, which implies bluffing will be less risky and more rewarding, being less prone to challenging.
@@ -18,6 +15,8 @@ As a note, make sure the bluffs you make, are consistent with your earlier moves
 ## Players
 The following players are playing the game: {players}
 You are player: {index}
+
+## Game Round (Begins from 1): {rounds}
 
 ## Agent State
 active_cards = {active_cards}

@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 from agent import Agent
 from cards import deal_cards, draw_cards, put_cards_in_deck
-from state import GameState, AgentAction, ProcessAction
+from state import GameState, AgentAction, ProcessAction, TrackChallengeBlock
 from langchain_openai import ChatOpenAI
 
 load_dotenv()
@@ -27,6 +27,7 @@ class PlayGround:
 
         # Managing Game State
         self.history = []
+        self.rounds: int = 0
         self.eliminated_cards = []
         self.action_player_map: dict = {
             "Income": ['Duke', 'Assassin', 'Ambassador', 'Captain', 'Contessa'],
@@ -100,45 +101,48 @@ class PlayGround:
         print("Active Player: ", active_player_index)
         print(self.players[active_player_index].state)
         # DEBUG
+        self.rounds += 1
         active_player: Agent = self.players[active_player_index]
         opponent_states = [
             f"Player {key}, Number of Cards Left: {val.state.num_active_cards()}, Number of Coins: {val.state.number_of_coins}"
             for key, val in enumerate(self.players) if key != active_player_index]
         players_list = [idx for idx, val in enumerate(self.players) if val.state.num_active_cards() > 0]
-        player_action: AgentAction = active_player.make_move(players=players_list, history=self.history,
-                                                             eliminated_cards=self.eliminated_cards,
-                                                             opponent_states=opponent_states)
-
-        self.update_state(player_idx=active_player_index, player_action=player_action)
         action_object = ProcessAction(
             active_player_index=active_player_index,
             players=players_list,
-            player_action=player_action,
+            player_action=None,
             opponent_states=opponent_states,
             history=self.history,
             eliminated_cards=self.eliminated_cards,
+            rounds=self.rounds
         )
 
-        print("***Checking For Challenge Action or Block Action***")
-        counter_action: dict = self.action_block_or_challenge(action_object=action_object)
+        player_action: AgentAction = active_player.make_move(action_object)
 
-        if counter_action["challenge_success"]:
+        action_object.player_action = player_action
+        self.update_state(player_idx=active_player_index, player_action=player_action)
+
+        print("***Checking For Challenge Action or Block Action***")
+        to_challenge_block: TrackChallengeBlock = self.action_block_or_challenge(action_object=action_object)
+
+        if to_challenge_block.challenge_success:
             return
 
         print("***Checking For Challenge on Block Action***")
-        if counter_action["block_success"]:
+        if to_challenge_block.block_success:
             block_action_object = ProcessAction(
-                active_player_index=active_player_index,
+                active_player_index=to_challenge_block.opposition_index,
                 players=players_list,
-                player_action=AgentAction(action=counter_action["counter_action"], target=player_action.target,
-                                          intuition="Challenging Block"),
+                player_action=AgentAction(action=to_challenge_block.counter_action, target=active_player_index,
+                                          intuition=f"Challenging Block from {to_challenge_block.opposition_index}"),
                 opponent_states=opponent_states,
                 history=self.history,
                 eliminated_cards=self.eliminated_cards,
+                rounds=self.rounds
             )
-            challenge_block = self.action_challenge_block(block_action_object)
+            challenge_block: TrackChallengeBlock = self.action_challenge_block(block_action_object)
 
-            if not challenge_block["challenge_success"]:
+            if not challenge_block.challenge_success:
                 # agent was not successful in challenging the block, meaning the action fails
                 return
 
@@ -184,11 +188,10 @@ class PlayGround:
         self.players[action_object.active_player_index].state.number_of_coins -= 7
         agent_action: AgentAction = self.players[action_object.player_action.target].drop_influence(action_object)
         if agent_action.card_to_discard is None:
-            # todo make sure the agent is not eliminated cards with no option, can be a prompt level change too
             return
         self.eliminated_cards.append(agent_action.card_to_discard)
 
-    def action_challenge(self, action_object: ProcessAction) -> dict:
+    def action_challenge(self, action_object: ProcessAction) -> TrackChallengeBlock:
         # pick a random order (range(0, 4)) for income, tax, foreign aid and exchange
         # otherwise only the targeted player for assassination and steal
         order: list[int] = random.sample(range(len(self.players)), k=len(self.players))
@@ -209,12 +212,12 @@ class PlayGround:
                     break
 
         if not agent_response:
-            return {"challenge_success": False}
+            return TrackChallengeBlock(challenge_success=False)
 
         to_challenge: bool = True if agent_response.counter_action == "Challenge" else False
 
         if not to_challenge:
-            return {"challenge_success": False}
+            return TrackChallengeBlock(challenge_success=False)
 
         action_used: str = action_object.player_action.action
         player_active_cards: set[str] = set(self.players[action_object.active_player_index].state.active_cards())
@@ -227,14 +230,14 @@ class PlayGround:
             self.players[action_object.active_player_index].state.switch_with_new(card_to_discard=chosen_cards[-1],
                                                                                   deck=self.deck)
             self.eliminated_cards.append(chosen_cards[-1])
-            return {"challenge_success": False}
+            return TrackChallengeBlock(challenge_success=False)
 
         agent_action: AgentAction = self.players[action_object.active_player_index].drop_influence(action_object)
         self.eliminated_cards.append(agent_action.card_to_discard)
 
-        return {"challenge_success": True}
+        return TrackChallengeBlock(challenge_success=False, opposition_index=challenger_index)
 
-    def action_block_or_challenge(self, action_object: ProcessAction) -> dict[str, bool]:
+    def action_block_or_challenge(self, action_object: ProcessAction) -> TrackChallengeBlock:
         order: list[int] = random.sample(range(len(self.players)), k=len(self.players))
 
         opposition_index = None
@@ -254,16 +257,14 @@ class PlayGround:
                     break
 
         if not agent_response:
-            return {"challenge_success": False, "block_success": False, "counter_action": "None",
-                    "opposition_index": None}
+            return TrackChallengeBlock(challenge_success=False, block_success=False, counter_action="None", opposition_index=None)
 
         to_challenge: bool = True if agent_response.counter_action == "Challenge" else False
         to_block: bool = True if agent_response.counter_action in ['Block Foreign Aid', 'Block Steal',
                                                                    'Block Assassinate'] else False
 
         if not to_challenge and not to_block:
-            return {"challenge_success": False, "block_success": False, "counter_action": agent_response.counter_action,
-                    "opposition_index": None}
+            return TrackChallengeBlock(challenge_success=False, block_success=False, counter_action=agent_response.counter_action, opposition_index=None)
 
         if to_challenge:
             action_used: str = action_object.player_action.action
@@ -277,26 +278,25 @@ class PlayGround:
                 self.players[action_object.active_player_index].state.switch_with_new(card_to_discard=chosen_cards[-1],
                                                                                       deck=self.deck)
                 self.eliminated_cards.append(chosen_cards[-1])
-                return {"challenge_success": False, "block_success": False,
-                        "counter_action": agent_response.counter_action, "opposition_index": opposition_index}
+                return TrackChallengeBlock(challenge_success=False, block_success=False, counter_action=agent_response.counter_action,
+                                           opposition_index=opposition_index)
 
             agent_action: AgentAction = self.players[action_object.active_player_index].drop_influence(action_object)
             self.eliminated_cards.append(agent_action.card_to_discard)
-            return {"challenge_success": True, "block_success": False, "counter_action": agent_response.counter_action,
-                    "opposition_index": opposition_index}
+            return TrackChallengeBlock(challenge_success=True, block_success=False, counter_action=agent_response.counter_action,
+                                       opposition_index=opposition_index)
 
-        return {"challenge_success": False, "block_success": True, "counter_action": agent_response.counter_action,
-                "opposition_index": opposition_index}
+        return TrackChallengeBlock(challenge_success=False, block_success=True, counter_action=agent_response.counter_action, opposition_index=opposition_index)
 
-    def action_challenge_block(self, action_object: ProcessAction):
-        agent_response: AgentAction = self.players[action_object.active_player_index].do_challenge(
+    def action_challenge_block(self, action_object: ProcessAction) -> TrackChallengeBlock:
+        agent_response: AgentAction = self.players[action_object.player_action.target].do_challenge(
             action_object=action_object)
         challenger_index = action_object.active_player_index
 
         to_challenge: bool = True if agent_response.counter_action == "Challenge" else False
 
         if not to_challenge:
-            return {"challenge_success": False}
+            return TrackChallengeBlock(challenge_success=False)
         target_index = action_object.player_action.target
 
         action_used: str = action_object.player_action.action
@@ -309,9 +309,9 @@ class PlayGround:
             self.players[challenger_index].drop_influence(action_object)
             self.players[target_index].state.switch_with_new(card_to_discard=chosen_cards[-1], deck=self.deck)
             self.eliminated_cards.append(chosen_cards[-1])
-            return {"challenge_success": False}
+            return TrackChallengeBlock(challenge_success=False)
 
         agent_action: AgentAction = self.players[target_index].drop_influence(action_object)
         self.eliminated_cards.append(agent_action.card_to_discard)
 
-        return {"challenge_success": True}
+        return TrackChallengeBlock(challenge_success=True)

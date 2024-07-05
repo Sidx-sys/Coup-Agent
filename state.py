@@ -69,10 +69,13 @@ class GameState(BaseModel):
 
 
 class AgentAction(BaseModel):
-    action: Optional[Literal['Income', 'Foreign Aid', 'Coup', 'Tax', 'Assassinate', 'Exchange', 'Steal', 'Challenge', 'Block Foreign Aid', 'Block Steal', 'Block Assassination', 'None']] = Field(None)
+    action: Optional[Literal[
+        'Income', 'Foreign Aid', 'Coup', 'Tax', 'Assassinate', 'Exchange', 'Steal', 'Challenge', 'Block Foreign Aid', 'Block Steal', 'Block Assassination', 'None']] = Field(
+        None)
     target: Optional[Union[None, int]] = None
     card_to_discard: Optional[Literal['Duke', 'Assassin', 'Ambassador', 'Captain', 'Contessa']] = None
-    counter_action: Optional[Literal['Challenge', 'Block Foreign Aid', 'Block Steal', 'Block Assassination', 'None']] = Field(None)
+    counter_action: Optional[
+        Literal['Challenge', 'Block Foreign Aid', 'Block Steal', 'Block Assassination', 'None']] = Field(None)
     intuition: str
 
     @field_validator('target', mode='before')
@@ -88,4 +91,19 @@ class ProcessAction(BaseModel):
     history: Optional[List[GameState]]
     eliminated_cards: Optional[List[str]]
     opponent_states: Optional[list[str]]
-    player_action: AgentAction
+    player_action: Optional[Union[None, AgentAction]]
+    rounds: int
+
+
+class TrackChallengeBlock(BaseModel):
+    challenge_success: bool
+    block_success: bool = False
+    counter_action: str = Optional[Literal[
+        'Income', 'Foreign Aid', 'Coup', 'Tax', 'Assassinate', 'Exchange', 'Steal', 'Challenge', 'Block Foreign Aid', 'Block Steal', 'Block Assassination', 'None']]
+    opposition_index: Optional[Union[None, int]] = None
+
+    @field_validator('opposition_index', mode='before')
+    def str_to_int(cls, v):
+        if isinstance(v, str):
+            return int(v)
+        return v

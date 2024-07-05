@@ -71,6 +71,7 @@ Character cards can have an action and a counteraction.
 
 2. Strategic Bluffing
    - Early Lies: In the first few turns, claim different roles to create uncertainty about your actual cards. This reduces the risk of challenges since information is sparse early on.
+   - Use Variety: In the early rounds, it is highly rewarding to act as one of Duke, Ambassador or Captain, even if you don't own them.
    - Controlled Bluffing: Occasionally, let actions like stealing succeed against you even if you could block them. Then, claim the blocking role later to confuse opponents and provoke challenges.
 
 3. Positioning and Timing

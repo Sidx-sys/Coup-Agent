@@ -26,11 +26,12 @@ class Agent:
         with open("prompts/block_or_challenge.txt") as f:
             self.prompts["block_or_challenge_template"] = f.read()
 
-    def _make_first_move(self, players: list) -> AgentAction:
+    def _make_first_move(self, action_object: ProcessAction) -> AgentAction:
         active_cards = f"Card 1: {self.state.card_1}, Card 2: {self.state.card_2}"
         coins = self.state.number_of_coins
         first_turn_prompt = self.prompts["first_turn_template"].format(
-            players=players, index=self.idx, active_cards=active_cards, coins=coins)
+            players=action_object.players, index=self.idx, active_cards=active_cards, coins=coins, rounds=action_object.rounds)
+
         messages = [("system", self.prompts["system"]), ("human", first_turn_prompt)]
         agent_output = self.llm.invoke(messages).content
         # DEBUG
@@ -40,22 +41,22 @@ class Agent:
 
         return agent_output
 
-    def _make_general_move(self, players: list, history: list[GameState], eliminated_cards: list,
-                           opponent_states: list) -> AgentAction:
+    def _make_general_move(self, action_object: ProcessAction) -> AgentAction:
         active_cards, coins = self._create_agent_state()
-        history_text = self._create_history_text(history)
-        opponent_states_text = "\n".join(opponent_states)
+        history_text = self._create_history_text(action_object.history)
+        opponent_states_text = "\n".join(action_object.opponent_states)
         play_turn_prompt = self.prompts["play_turn_template"].format(
-            players=players,
+            players=action_object.players,
             index=self.idx,
             game_history=history_text,
-            eliminated_cards=eliminated_cards,
-            player_index=history[-1].player_index,
-            player_action=history[-1].player_action,
-            target_player_index=history[-1].target_player_index,
+            eliminated_cards=action_object.eliminated_cards,
+            player_index=action_object.history[-1].player_index,
+            player_action=action_object.history[-1].player_action,
+            target_player_index=action_object.history[-1].target_player_index,
             active_cards=active_cards,
             coins=coins,
-            opponent_states=opponent_states_text
+            opponent_states=opponent_states_text,
+            rounds=action_object.rounds
         )
 
         messages = [("system", self.prompts["system"]), ("human", play_turn_prompt)]
@@ -71,12 +72,12 @@ class Agent:
 
         return agent_output
 
-    def make_move(self, players: list, history: list, eliminated_cards: list, opponent_states: list) -> AgentAction:
+    def make_move(self, action_object: ProcessAction) -> AgentAction:
         self.num_moves += 1
         if self.num_moves == 1:
-            return self._make_first_move(players)
+            return self._make_first_move(action_object)
 
-        return self._make_general_move(players, history, eliminated_cards, opponent_states)
+        return self._make_general_move(action_object)
 
     def drop_influence(self, action_object: ProcessAction) -> AgentAction:
         if self.state.num_active_cards() == 0:
@@ -97,7 +98,8 @@ class Agent:
             eliminated_cards=action_object.eliminated_cards,
             active_cards=active_cards,
             coins=coins,
-            opponent_states=opponent_states_text
+            opponent_states=opponent_states_text,
+            rounds=action_object.rounds
         )
 
         messages = [("system", self.prompts["system"]), ("human", drop_influence_prompt)]
@@ -121,7 +123,8 @@ class Agent:
             target_player_index=action_object.player_action.target,
             active_cards=active_cards,
             coins=coins,
-            opponent_states=opponent_states_text
+            opponent_states=opponent_states_text,
+            rounds=action_object.rounds
         )
 
         messages = [("system", self.prompts["system"]), ("human", do_challenge_prompt)]
@@ -148,7 +151,8 @@ class Agent:
             target_player_index=action_object.player_action.target,
             active_cards=active_cards,
             coins=coins,
-            opponent_states=opponent_states_text
+            opponent_states=opponent_states_text,
+            rounds=action_object.rounds
         )
 
         messages = [("system", self.prompts["system"]), ("human", do_block_or_challenge_prompt)]

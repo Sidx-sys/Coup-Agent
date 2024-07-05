@@ -11,7 +11,7 @@ Agent State: Information regarding current state of agent, consisting of the inf
 Opponent State: Information regarding current state of opponents, consisting of the number of influences and the number of coins they own.
 
 Turn Phase: Different phases of a player’s turn. These are, in the following particular order:
-- BeginTurn: The current player has put down the action.
+- BeginTurn: The current player has to put down the action, so only Income, Foreign Aid, Steal (Captain), Tax (Duke), Assassinate (Assassin), Exchange (Ambassador) or Coup are valid actions in this turn. Challenge and Block Actions are strictly prohibited here.
 
 Make sure the bluffs you make, are consistent with your earlier moves, and also are not extremely risky. For example:
 - If you have bluffed as a Duke earlier, you could use it occasionally elsewhere to use the Tax action of the Duke as well. Same goes for other roles.
@@ -19,7 +19,9 @@ Make sure the bluffs you make, are consistent with your earlier moves, and also 
 
 ## Players
 The following players are playing the game: {players}
-You are player: {index}
+You are player: {index}, It is your turn.
+
+## Game Round (Begins from 1): {rounds}
 
 ## Game History
 {game_history}
